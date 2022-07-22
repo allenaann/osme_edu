@@ -36,7 +36,7 @@ content = resp.text
 
 bs = BeautifulSoup(content, 'html.parser')
 for programme in bs.select('#programme-data-content a'):
-    urls.append(programme['href'])
+    urls.append('"'+programme['href']+'"')
     group = ['-','-','-','-','-']
     group[0] = programme.text
     programmes.append(group)
