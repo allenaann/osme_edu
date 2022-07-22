@@ -25,13 +25,12 @@ application_dates = []
 study_modes = []
 start_dates = []
 s = requests.Session()
-s.mount('http://',HTTPAdapter(max_retries=10))
-s.mount('https://',HTTPAdapter(max_retries=10))
+s.mount('http://',HTTPAdapter(max_retries=5))
+s.mount('https://',HTTPAdapter(max_retries=5))
 try:
-    resp = s.get(root_url, headers=headers)
+    resp = s.request("GET",url=root_url, headers=headers)
 except requests.exceptions.RequestException as e:
     print(e)
-    exit()   
 resp.encoding = 'utf-8'
 content = resp.text
 
@@ -42,12 +41,11 @@ for programme in bs.select('#programme-data-content a'):
     group[0] = programme.text
     programmes.append(group)
 
-for i in range(len(urls)):
+for i in range(104,len(urls)):
     try:
-        resp = s.get(urls[i], headers=headers, timeout=(30,60))
+        resp = s.request("GET",url=urls[i], headers=headers, timeout=(30,60))
     except requests.exceptions.RequestException as e:
         print(e)
-        exit()
     resp.encoding = 'utf-8'
     content = resp.text
     group = programmes[i]
