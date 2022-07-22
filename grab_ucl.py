@@ -25,12 +25,12 @@ application_dates = []
 study_modes = []
 start_dates = []
 s = requests.Session()
-s.mount('http://',HTTPAdapter(max_retries=5))
-s.mount('https://',HTTPAdapter(max_retries=5))
+s.mount('http://',HTTPAdapter(max_retries=10))
+s.mount('https://',HTTPAdapter(max_retries=10))
 try:
     resp = s.get(root_url, headers=headers)
 except requests.exceptions.RequestException as e:
-    print("Request Failed!")
+    print(e)
     exit()   
 resp.encoding = 'utf-8'
 content = resp.text
@@ -44,9 +44,9 @@ for programme in bs.select('#programme-data-content a'):
 
 for i in range(len(urls)):
     try:
-        resp = s.get(urls[i], headers=headers, timeout=10)
+        resp = s.get(urls[i], headers=headers, timeout=(30,60))
     except requests.exceptions.RequestException as e:
-        print("Request Failed!")
+        print(e)
         exit()
     resp.encoding = 'utf-8'
     content = resp.text
@@ -60,7 +60,7 @@ for i in range(len(urls)):
         writeData(group)
         continue
     
-    group[1] = requirement[0].text
+    group[1] = '"'+requirement[0].text+'"'
 
     tags = bs.find_all('div', class_='prog-key-info__text')
     for tag in tags:
