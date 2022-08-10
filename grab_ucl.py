@@ -36,12 +36,12 @@ content = resp.text
 
 bs = BeautifulSoup(content, 'html.parser')
 for programme in bs.select('#programme-data-content a'):
-    urls.append('"'+programme['href']+'"')
+    urls.append(programme['href'])
     group = ['-','-','-','-','-']
     group[0] = programme.text
     programmes.append(group)
 
-for i in range(104,len(urls)):
+for i in range(len(urls)):
     try:
         resp = s.request("GET",url=urls[i], headers=headers, timeout=(30,60))
     except requests.exceptions.RequestException as e:
